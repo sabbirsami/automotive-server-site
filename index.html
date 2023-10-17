@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Server</title>
+        <style>
+            .container {
+                width: 1024px;
+                margin: 0 auto;
+            }
+
+            .flex {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+            .flex a {
+                font-size: 18px;
+            }
+            td {
+                border: 1px solid black;
+            }
+            td a {
+                display: block;
+                padding: 10px;
+                color: black;
+            }
+            td a:hover {
+                background-color: brown;
+                color: white;
+                transition: 0.4s ease-in-out;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <div class="flex">
+                <h1>Server working</h1>
+                <a target="_blank" href="https://sabbir-mohammad-sami.web.app/"
+                    >Developer</a
+                >
+            </div>
+            <div class="">
+                <table style="width: 100%">
+                    <tr>
+                        <td>
+                            <a
+                                href="http://localhost:5000/products"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                >All products</a
+                            >
+                        </td>
+                        <td>
+                            <a
+                                href="http://localhost:5000/users"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                >All users</a
+                            >
+                        </td>
+                        <td>
+                            <a
+                                href="http://localhost:5000/product/2"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                >A product</a
+                            >
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </body>
+</html>
