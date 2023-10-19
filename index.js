@@ -1,5 +1,5 @@
 const express = require("express");
-const { MongoClient, ServerApiVersion } = require("mongodb");
+const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 const cors = require("cors");
 const path = require("path");
 require("dotenv").config();
@@ -26,16 +26,25 @@ async function run() {
         // Connect the client to the server	(optional starting in v4.7)
         await client.connect();
         const carsDatabase = client.db("finderDB").collection("cars");
+        const cartDatabase = client.db("finderDB").collection("cart");
 
         app.get("/cars", async (req, res) => {
             const result = await carsDatabase.find().toArray();
             res.send(result);
         });
-        app.get("/cars/:brand", async (req, res) => {
+        app.get("/product/:brand", async (req, res) => {
             const brand = req.params;
-            console.log(brand.brand);
             const result = await carsDatabase
                 .find({ brand: { $all: [brand.brand] } })
+                .toArray();
+            res.send(result);
+        });
+        app.get("/product/:brand/:id", async (req, res) => {
+            const brand = req.params;
+            console.log(brand);
+            console.log(brand.brand);
+            const result = await carsDatabase
+                .find({ _id: new ObjectId(brand.id) })
                 .toArray();
             console.log(result);
             res.send(result);
@@ -43,6 +52,11 @@ async function run() {
         app.post("/cars", async (req, res) => {
             const car = req.body;
             const result = await carsDatabase.insertOne(car);
+            res.send(result);
+        });
+        app.post("/cart", async (req, res) => {
+            const cart = req.body;
+            const result = await carsDatabase.insertOne(cart);
             res.send(result);
         });
 
