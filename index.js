@@ -56,7 +56,7 @@ async function run() {
         });
         app.post("/cart", async (req, res) => {
             const cart = req.body;
-            const result = await carsDatabase.insertOne(cart);
+            const result = await cartDatabase.insertOne(cart);
             res.send(result);
         });
 
