@@ -32,6 +32,10 @@ async function run() {
             const result = await carsDatabase.find().toArray();
             res.send(result);
         });
+        app.get("/cart", async (req, res) => {
+            const result = await cartDatabase.find().toArray();
+            res.send(result);
+        });
         app.get("/product/:brand", async (req, res) => {
             const brand = req.params;
             const result = await carsDatabase
@@ -41,12 +45,9 @@ async function run() {
         });
         app.get("/product/:brand/:id", async (req, res) => {
             const brand = req.params;
-            console.log(brand);
-            console.log(brand.brand);
             const result = await carsDatabase
                 .find({ _id: new ObjectId(brand.id) })
                 .toArray();
-            console.log(result);
             res.send(result);
         });
         app.post("/cars", async (req, res) => {
@@ -57,6 +58,13 @@ async function run() {
         app.post("/cart", async (req, res) => {
             const cart = req.body;
             const result = await cartDatabase.insertOne(cart);
+            res.send(result);
+        });
+        app.delete("/cart/:id", async (req, res) => {
+            const id = req.params;
+            const result = await cartDatabase.deleteOne({
+                _id: new ObjectId(id),
+            });
             res.send(result);
         });
 
