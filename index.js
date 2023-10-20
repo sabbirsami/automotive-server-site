@@ -50,6 +50,26 @@ async function run() {
                 .toArray();
             res.send(result);
         });
+        app.put("/product/:brand/:id", async (req, res) => {
+            const brand = req.params;
+            const car = req.body;
+            console.log(car);
+            console.log(brand);
+            const query = { _id: new ObjectId(brand.id) };
+            const updatedCar = {
+                $set: {
+                    photoUrl: car.photoUrl,
+                    name: car.name,
+                    brand: car.brand,
+                    type: car.type,
+                    price: car.price,
+                    description: car.description,
+                    rating: car.rating,
+                },
+            };
+            const result = await carsDatabase.updateOne(query, updatedCar);
+            res.send(result);
+        });
         app.post("/cars", async (req, res) => {
             const car = req.body;
             const result = await carsDatabase.insertOne(car);
