@@ -8,7 +8,12 @@ const app = express();
 
 // MIDDLEWARE
 app.use(express.json());
-app.use(cors());
+const corsConfig = {
+    origin: "*",
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+};
+app.use(cors(corsConfig));
 
 const uri = `mongodb+srv://${process.env.USER_ID}:${process.env.USER_PASSWORD}@finder.nudv56z.mongodb.net/?retryWrites=true&w=majority`;
 
