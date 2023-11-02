@@ -3,6 +3,7 @@ const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 const cors = require("cors");
 const path = require("path");
 const jwt = require("jsonwebtoken");
+const cookieParser = require("cookie-parser");
 require("dotenv").config();
 const port = process.env.PORT || 5000;
 const app = express();
@@ -15,6 +16,7 @@ const corsConfig = {
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
 };
 app.use(cors(corsConfig));
+app.use(cookieParser());
 
 const uri = `mongodb+srv://${process.env.USER_ID}:${process.env.USER_PASSWORD}@finder.nudv56z.mongodb.net/?retryWrites=true&w=majority`;
 
@@ -26,6 +28,20 @@ const client = new MongoClient(uri, {
         deprecationErrors: true,
     },
 });
+const verifyToken = (req, res, next) => {
+    const token = req?.cookies?.token;
+    console.log(token);
+    if (!token) {
+        res.status(401).send({ message: "unauthorized access" });
+    }
+    jwt.verify(token, process.env.ACCESS_TOKEN, (err, decoded) => {
+        if (err) {
+            return res.status(401).send({ message: "unauthorized access" });
+        }
+        req.user = decoded;
+        next();
+    });
+};
 
 async function run() {
     try {
@@ -67,7 +83,9 @@ app.get("/cars", async (req, res) => {
     const result = await carsDatabase.find().toArray();
     res.send(result);
 });
-app.get("/cart", async (req, res) => {
+app.get("/cart", verifyToken, async (req, res) => {
+    console.log(req.query);
+    console.log(req.user);
     const result = await cartDatabase.find().toArray();
     res.send(result);
 });
