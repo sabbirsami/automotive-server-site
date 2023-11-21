@@ -1,4 +1,7 @@
 const express = require("express");
+const stripe = require("stripe")(
+    "sk_test_51L2vNMJH0mXagrhOnlmlSRuGcZlxlPmTDXwppJRC9qpPBLt5yfnn89Q8cbmvDv9ftU2R5ejHxMqM7stzUlZXbRfP00qrbjPmoS"
+);
 const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 const cors = require("cors");
 const path = require("path");
@@ -139,6 +142,28 @@ app.delete("/cart/:id", async (req, res) => {
         _id: new ObjectId(id),
     });
     res.send(result);
+});
+app.delete("/product/:id", async (req, res) => {
+    const id = req.params;
+    const result = await carsDatabase.deleteOne({
+        _id: new ObjectId(id),
+    });
+    res.send(result);
+});
+
+// payment
+app.post("/create-payment-intent", async (req, res) => {
+    const { price } = req.body;
+    console.log(price);
+    const amount = parseInt(price * 100);
+    const paymentIntent = await stripe.paymentIntents.create({
+        amount: amount,
+        currency: "usd",
+        payment_method_types: ["card"],
+    });
+    res.send({
+        clientSecret: paymentIntent.client_secret,
+    });
 });
 
 app.get("/", (req, res) => {
